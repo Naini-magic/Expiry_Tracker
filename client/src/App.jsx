@@ -1,12 +1,42 @@
-import { useState } from 'react'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Sidebar from "./components/Sidebar";
+import Navbar from "./components/Navbar";
+import Home from "./components/Home";
+import AddItem from "./components/AddItem";
+import Collection from "./components/Collection";
+import Notification from "./components/Notification";
+import ExpiryForm from "./components/ExpiryForm";
 
-import './App.css'
+import "./App.css";
+
+
 
 function App() {
-
   return (
-   <div className='bg-blue-200'>hello</div>
-  )
+    <Router>
+   
+        {/* Sidebar (Fixed) */}
+        <Sidebar />
+
+        {/* Main Content Wrapper */}
+       
+          {/* Navbar (Fixed at Top) */}
+          <Navbar />
+
+          {/* Page Content (Takes Full Remaining Space) */}
+          <div className="flex-1 p-6 mt-16 ml-20 overflow-auto">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/add-item" element={<AddItem />} />
+              <Route path="/expiry-form/:barcode" element={<ExpiryForm />} />
+              <Route path="/collection" element={<Collection />} />
+              <Route path="/notifications" element={<Notification />} />
+            </Routes>
+          </div>
+        
+    
+    </Router>
+  );
 }
 
-export default App
+export default App;
