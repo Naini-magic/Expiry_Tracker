@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const Sidebar = () => {
   return (
-    <aside className="fixed top-16 left-0 h-[calc(100vh-4rem)] w-20 bg-white shadow-md flex flex-col items-center py-4 space-y-6">
+    <aside className="fixed top-16 left-0 h-[calc(100vh-4rem)] w-20 bg-white shadow-md flex flex-col items-center py-4 space-y-6 z-50">
       {/* Navigation Icons */}
       <div className="flex flex-col space-y-9">
         <Link to="/" className="flex flex-col items-center text-gray-600 hover:text-black">

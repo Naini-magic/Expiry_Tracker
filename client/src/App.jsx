@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Sidebar from "./components/Sidebar";
-import Navbar from "./components/Navbar";
 import Home from "./components/Home";
-import AddItem from "./components/AddItem";
-import Collection from "./components/Collection";
-import Notification from "./components/Notification";
-import ExpiryForm from "./components/ExpiryForm";
+import Navbar from "./components/Navbar";
+import Sidebar from "./components/SidebarComponents/Sidebar";
+import AddItem from "./components/SidebarComponents/AddItem";
+import Collection from "./components/SidebarComponents/Collection";
+import Notification from "./components/SidebarComponents/Notification";
+import ExpiryForm from "./components/SidebarComponents/ExpiryForm";
 
 import "./App.css";
 
@@ -28,7 +28,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/add-item" element={<AddItem />} />
-              <Route path="/expiry-form/:barcode" element={<ExpiryForm />} />
+              <Route path="/expiry-form/:barcode?" element={<ExpiryForm />} />
               <Route path="/collection" element={<Collection />} />
               <Route path="/notifications" element={<Notification />} />
             </Routes>

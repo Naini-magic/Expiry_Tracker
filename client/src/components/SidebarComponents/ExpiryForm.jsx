@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
 export default function ExpiryForm() {
   const { barcode } = useParams(); // Get barcode from URL
@@ -19,14 +20,36 @@ export default function ExpiryForm() {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file));
+      setImage(file);
     }
   };
+  
 
-  const handleSubmit = () => {
-    console.log({ productName, expiryDate, collectionName, notificationDays, image, barcode: barcodeValue });
-    alert("Expiry item saved!");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    const formData = new FormData();
+    formData.append("barcode", barcodeValue);
+    formData.append("productName", productName);
+    formData.append("expiryDate", expiryDate);
+    formData.append("collectionName", collectionName);
+    formData.append("notificationDays", notificationDays);
+    if (image) {
+      formData.append("image", image);
+    }
+  
+    try {
+      const response = await axios.post("http://localhost:5000/api/expiry-items", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      alert("Expiry item saved!");
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error saving item", error);
+      alert("Failed to save item.");
+    }
   };
+  
 
   return (
     <div className="max-w-md mx-auto p-4 bg-gray-100 rounded-lg shadow-lg">
