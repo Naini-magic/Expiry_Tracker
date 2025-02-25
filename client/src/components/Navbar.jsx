@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <nav className="fixed top-0 left-0 w-full bg-white shadow-md px-6 py-3 flex items-center justify-between">
+    <nav className="fixed top-0 left-0 w-full bg-white shadow-md px-6 py-3 flex items-center justify-between z-50">
 
-      <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-gray-700">
+      <div className="text-lg sm:text-2xl md:text-2xl lg:text-3xl font-bold text-gray-700">
         ExpiryTracker
       </div>
 

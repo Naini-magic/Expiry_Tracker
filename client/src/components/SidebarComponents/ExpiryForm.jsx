@@ -45,6 +45,14 @@ export default function ExpiryForm() {
       });
       alert("Expiry item saved!");
       console.log(response.data);
+ 
+    setProductName("");
+    setExpiryDate("");
+    setCollectionName("");
+    setNotificationDays("");
+    setImage(null);
+    setBarcodeValue("");
+
     } catch (error) {
       console.error("Error saving item", error);
       alert("Failed to save item.");
