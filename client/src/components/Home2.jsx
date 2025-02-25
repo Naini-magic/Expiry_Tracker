@@ -1,31 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { FaTimes } from "react-icons/fa"; 
 import axios from "axios";
+import { motion } from "framer-motion"; // For animations
 
-const Home = () => {
+const Home2 = () => {
   const [products, setProducts] = useState([]);
-   const [deleteId, setDeleteId] = useState(null); // Track which product to delete
-    const [showModal, setShowModal] = useState(false); // Toggle delete confirmation modal
+  const [deleteId, setDeleteId] = useState(null); // Track which product to delete
+  const [showModal, setShowModal] = useState(false); // Toggle delete confirmation modal
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/expiry-items")
+      .get("http://localhost:5000/api/expiry-items") // ✅ Correct API endpoint
       .then((res) => setProducts(res.data))
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
 
-  const getDaysLeft = (expiryDate) => {
-    if (!expiryDate) return "N/A";
-    const today = new Date();
-    const expiry = new Date(expiryDate);
-    if (isNaN(expiry)) return "Invalid Date";
-    const diffTime = expiry - today;
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  };
-
-   // Function to confirm deletion
-   const confirmDelete = (id) => {
+  // Function to confirm deletion
+  const confirmDelete = (id) => {
     setDeleteId(id);
     setShowModal(true);
   };
@@ -48,15 +38,14 @@ const Home = () => {
   
   
 
-
-  // Variants for animation
-  const productVariants = {
-    hidden: { opacity: 0, y: 20 }, // Start position (invisible, moved down)
-    visible: (index) => ({
-      opacity: 1,
-      y: 0,
-      transition: { delay: index * 0.2, duration: 0.5 }, // Delay each product by 0.2s
-    }),
+  // Function to get remaining days before expiry
+  const getDaysLeft = (expiryDate) => {
+    if (!expiryDate) return "N/A";
+    const today = new Date();
+    const expiry = new Date(expiryDate);
+    if (isNaN(expiry)) return "Invalid Date";
+    const diffTime = expiry - today;
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   };
 
   return (
@@ -64,30 +53,22 @@ const Home = () => {
       <h2 className="text-gray-800 text-xl font-bold mb-4 flex justify-center">
         All Products
       </h2>
+      
       {products.length === 0 ? (
         <p className="text-gray-500">No products available.</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4">
           {products.map((product, index) => {
             const daysLeft = getDaysLeft(product.expiryDate);
+
             return (
               <motion.div
                 key={product._id}
-                className="relative bg-gray-200 p-4 rounded flex items-center transition duration-300 ease-in-out shadow-gray-400 hover:shadow-lg"
-                variants={productVariants}
-                initial="hidden"
-                animate="visible"
-                custom={index} // Pass index for staggered animation
-                whileHover={{ scale: 1.05 }}
+                className="bg-white p-4 rounded-lg shadow-md flex items-center justify-between transition duration-300 hover:shadow-lg relative"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
               >
-                 {/* Delete Icon */}
-                 <button
-                  className="absolute top-2 right-2 text-gray-400 hover:text-gray-500"
-                  onClick={() => confirmDelete(product._id)}
-                >
-                   <FaTimes size={18} />
-                </button>
-
                 {/* Product Image */}
                 <img
                   src={product.image || "/landscape-placeholder.svg"}
@@ -97,19 +78,14 @@ const Home = () => {
 
                 {/* Product Details */}
                 <div className="flex-1">
-                  <p className="text-gray-800 font-semibold">
-                    {product.productName}
-                  </p>
+                  <p className="text-gray-800 font-semibold">{product.productName}</p>
                   <p className="text-sm text-gray-600">
                     {product.expiryDate
-                      ? new Date(product.expiryDate).toLocaleDateString(
-                          "en-US",
-                          {
-                            month: "short",
-                            day: "2-digit",
-                            year: "numeric",
-                          }
-                        )
+                      ? new Date(product.expiryDate).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "2-digit",
+                          year: "numeric",
+                        })
                       : "No date"}
                   </p>
                 </div>
@@ -121,22 +97,28 @@ const Home = () => {
                   </p>
                   <p
                     className={
-                      daysLeft <= 0
-                        ? "text-red-500 font-small"
-                        : "text-green-500 font-small"
+                      daysLeft <= 0 ? "text-red-500 font-small" : "text-green-500 font-small"
                     }
                   >
                     {daysLeft <= 0 ? "Expired" : `${daysLeft} days left`}
                   </p>
                 </div>
+
+                {/* Delete Icon */}
+                <button
+                  className="absolute top-2 right-2 text-gray-500 hover:text-red-500"
+                  onClick={() => confirmDelete(product._id)}
+                >
+                  ❌
+                </button>
               </motion.div>
             );
           })}
         </div>
       )}
 
-  {/* Delete Confirmation Modal */}
-  {showModal && (
+      {/* Delete Confirmation Modal */}
+      {showModal && (
         <div className="fixed inset-0  bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-md w-96 text-center">
             <p className="text-lg font-semibold">Would you like to delete 1 selected product?</p>
@@ -157,10 +139,8 @@ const Home = () => {
           </div>
         </div>
       )}
-
-
     </div>
   );
 };
 
-export default Home;
+export default Home2;

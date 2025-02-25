@@ -11,6 +11,7 @@ export default function ExpiryForm() {
   const [image, setImage] = useState(null);
   const [barcodeValue, setBarcodeValue] = useState("");
 
+ 
   useEffect(() => {
     if (barcode) {
       setBarcodeValue(barcode); // Set barcode automatically
