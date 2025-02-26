@@ -11,7 +11,9 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + path.extname(file.originalname)); // Unique filename
   },
 });
+
 const upload = multer({ storage });
+
 
 // ✅ **Route to Add New Expiry Item**
 router.post("/", upload.single("image"), async (req, res) => {
@@ -20,7 +22,7 @@ router.post("/", upload.single("image"), async (req, res) => {
       barcode: req.body.barcode,
       productName: req.body.productName,
       expiryDate: req.body.expiryDate,
-      collectionName: req.body.collectionName, // ✅ Fixed (Used correct field)
+      collectionName: req.body.collectionName, 
       notificationDays: req.body.notificationDays,
       image: req.file ? `/uploads/${req.file.filename}` : "", // Store image path
     });

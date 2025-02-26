@@ -10,8 +10,8 @@ const AddItem = () => {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Add New Item</h1>
+    <div className="p-6 bg-gray-200 text-gray-600 lg:w-1/2 sm:w-full flex flex-col justify-self-center">
+      <h1 className="text-2xl font-bold mb-4 flex items-center justify-center">Add New Item</h1>
       <BarcodeScanner onScan={handleScan} />
     </div>
   );
