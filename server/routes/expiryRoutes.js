@@ -4,6 +4,7 @@ const multer = require("multer");
 const path = require("path");
 const ExpiryItem = require("../models/ExpiryItem");
 
+
 // Multer Storage Setup
 const storage = multer.diskStorage({
   destination: "./uploads/", // Store files in "uploads" folder
@@ -73,6 +74,31 @@ router.get("/:id", async (req, res) => {
     res.json(product);
   } catch (error) {
     res.status(500).json({ message: "Error fetching product", error });
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  try {
+    const { barcode, productName, expiryDate, collectionName, notificationDays } = req.body;
+
+    const existingProduct = await ExpiryItem.findById(req.params.id);
+    if (!existingProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    // Update only the text fields, preserving the existing image
+    existingProduct.barcode = barcode;
+    existingProduct.productName = productName;
+    existingProduct.expiryDate = expiryDate;
+    existingProduct.collectionName = collectionName;
+    existingProduct.notificationDays = notificationDays;
+
+    const updatedProduct = await existingProduct.save();
+
+    res.json(updatedProduct);
+  } catch (error) {
+    console.error("Error updating product:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 });
 

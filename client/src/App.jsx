@@ -1,3 +1,5 @@
+
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import Navbar from "./components/Navbar";
@@ -9,6 +11,7 @@ import ExpiryForm from "./components/SidebarComponents/ExpiryForm";
 
 import "./App.css";
 import ProductPage from "./components/ProductPage";
+// import Layout from "./components/Layout";
 
 
 
@@ -23,6 +26,7 @@ function App() {
        
           {/* Navbar (Fixed at Top) */}
           <Navbar />
+          {/* <Layout/> */}
 
           {/* Page Content (Takes Full Remaining Space) */}
           <div className="flex-1 p-6 mt-16 ml-20 overflow-auto">
