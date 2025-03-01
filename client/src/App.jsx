@@ -29,7 +29,7 @@ function App() {
           {/* <Layout/> */}
 
           {/* Page Content (Takes Full Remaining Space) */}
-          <div className="flex-1 p-6 mt-16 ml-20 overflow-auto">
+          <div className="flex-1 lg:p-6 md:p-6 sm:p-3 mt-20 lg:ml-20 md:ml-20 sm:ml-2 overflow-auto">
             <Routes>
               <Route path="/" element={< Home/>} />
               <Route path="/add-item" element={<AddItem />} />

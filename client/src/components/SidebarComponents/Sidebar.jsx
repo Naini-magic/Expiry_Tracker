@@ -7,8 +7,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     <aside
   
     className={`fixed top-12 left-0 h-screen z-50 bg-white shadow-lg 
-      transition-transform duration-300 ease-in-out 
-      w-20 lg:w-20 md:w-20 sm:w-40 sm:top-16
+      transition-transform duration-300 ease-in-out lg:w-20 md:w-20 sm:w-40 sm:top-16
       ${isOpen ? "translate-x-0" : "-translate-x-full sm:translate-x-0"}`}
     >
       {/* Close Button (Only visible on small screens) */}

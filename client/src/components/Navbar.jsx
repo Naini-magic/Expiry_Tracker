@@ -10,7 +10,7 @@ const Navbar = () => {
       <nav className="fixed top-0 left-0 w-full bg-white shadow-md px-6 py-3 flex items-center justify-between z-50">
         {/* Menu Icon (Left Side, only on small screens) */}
         <button
-          className="sm:hidden text-gray-700 text-2xl mr-4"
+          className="sm:hidden text-gray-700 text-xl mr-1"
           onClick={() => setSidebarOpen(!sidebarOpen)}
         >
           <FaBars />
@@ -22,7 +22,7 @@ const Navbar = () => {
         </div>
 
         {/* Search Bar (Hidden on Small Screens) */}
-        <div className="hidden sm:flex bg-gray-200 rounded-full px-4 py-2 items-center w-1/2">
+        <div className="bg-gray-200 flex rounded-full px-4 py-2 items-center w-1/2 ">
           <FaSearch className="text-gray-500" />
           <input
             type="text"
