@@ -33,7 +33,7 @@ function App() {
             <Routes>
               <Route path="/" element={< Home/>} />
               <Route path="/add-item" element={<AddItem />} />
-              <Route path="/expiry-form/:barcode?" element={<ExpiryForm />} />
+              <Route path="/expiry-form/:barcode?" element={<ExpiryForm/>} />
               <Route path="/collection" element={<Collection />} />
               <Route path="/notifications" element={<Notification />} />
               <Route path="/product/:id" element={<ProductPage/>} />
