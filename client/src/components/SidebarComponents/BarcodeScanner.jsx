@@ -6,6 +6,7 @@ const BarcodeScanner = () => {
   const videoRef = useRef(null);
   const navigate = useNavigate();
   const [manualBarcode, setManualBarcode] = useState("");
+  const [scannerStarted, setScannerStarted] = useState(false); // Prevent multiple scanner starts
 
   useEffect(() => {
     const codeReader = new BrowserMultiFormatReader();
@@ -15,6 +16,13 @@ const BarcodeScanner = () => {
         console.error("❌ Video element is not available.");
         return;
       }
+
+      if (scannerStarted) {
+        console.warn("📸 Scanner is already running.");
+        return; // Prevent reinitialization
+      }
+
+      setScannerStarted(true); // Mark scanner as started
 
       try {
         // Start the barcode scanner
@@ -39,8 +47,9 @@ const BarcodeScanner = () => {
         stream.getTracks().forEach((track) => track.stop());
         videoRef.current.srcObject = null;
       }
+      setScannerStarted(false); // Reset state when unmounting
     };
-  }, [navigate]);
+  }, [navigate]); // Ensures the effect only runs when the component mounts
 
   const handleManualSubmit = () => {
     if (manualBarcode.trim() !== "") {
@@ -69,6 +78,7 @@ const BarcodeScanner = () => {
 };
 
 export default BarcodeScanner;
+
 
 
 // import React, { useEffect, useRef, useState } from "react";
