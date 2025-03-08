@@ -1,75 +1,43 @@
-import React, { useEffect, useRef, useState } from "react";
-import { BrowserMultiFormatReader } from "@zxing/library";
+import React, { useState } from "react";
+import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import { useNavigate } from "react-router-dom";
 
 const BarcodeScanner = () => {
-  const videoRef = useRef(null);
+  const [barcode, setBarcode] = useState("");
   const navigate = useNavigate();
-  const [manualBarcode, setManualBarcode] = useState("");
-  const [scannerStarted, setScannerStarted] = useState(false); // Prevent multiple scanner starts
-
-  useEffect(() => {
-    const codeReader = new BrowserMultiFormatReader();
-
-    const startScanner = async () => {
-      if (!videoRef.current) {
-        console.error("❌ Video element is not available.");
-        return;
-      }
-
-      if (scannerStarted) {
-        console.warn("📸 Scanner is already running.");
-        return; // Prevent reinitialization
-      }
-
-      setScannerStarted(true); // Mark scanner as started
-
-      try {
-        // Start the barcode scanner
-        await codeReader.decodeFromVideoDevice(undefined, videoRef.current, (result) => {
-          if (result) {
-            navigate(`/expiry-form/${result.text}`);
-          }
-        });
-
-        console.log("🎥 Video stream is ready.");
-      } catch (err) {
-        console.error("Error accessing camera:", err);
-      }
-    };
-
-    startScanner();
-
-    return () => {
-      codeReader.reset();
-      if (videoRef.current?.srcObject) {
-        const stream = videoRef.current.srcObject;
-        stream.getTracks().forEach((track) => track.stop());
-        videoRef.current.srcObject = null;
-      }
-      setScannerStarted(false); // Reset state when unmounting
-    };
-  }, [navigate]); // Ensures the effect only runs when the component mounts
-
-  const handleManualSubmit = () => {
-    if (manualBarcode.trim() !== "") {
-      navigate(`/expiry-form/${manualBarcode}`);
-    }
-  };
 
   return (
     <div className="flex flex-col items-center bg-gray-300">
       <h2 className="text-xl font-bold pt-5">Scan or Enter Barcode</h2>
-      <video ref={videoRef} className="w-64 h-64" playsInline muted></video>
+
+      <div className="w-64 h-64 border border-gray-600 flex items-center justify-center">
+        <BarcodeScannerComponent
+          width={250}
+          height={250}
+          delay={500} // Increase delay to 500ms
+          onUpdate={(err, result) => {
+            if (result) {
+              setBarcode(result.text);
+              navigate(`/expiry-form/${result.text}`);
+            } else if (err) {
+              console.error("❌ Scanning Error:", err);
+            }
+          }}
+        />
+      </div>
+
       <div className="mt-2 flex gap-2 pb-3">
         <input
           type="text"
           placeholder="Enter Barcode Number"
-          value={manualBarcode}
-          onChange={(e) => setManualBarcode(e.target.value)}
+          value={barcode}
+          onChange={(e) => setBarcode(e.target.value)}
           className="border border-gray-600 rounded-2xl p-2 w-48"
         />
-        <button onClick={handleManualSubmit} className="bg-gray-500 text-white px-4 py-2 rounded">
+        <button
+          onClick={() => navigate(`/expiry-form/${barcode}`)}
+          className="bg-gray-500 text-white px-4 py-2 rounded"
+        >
           Submit
         </button>
       </div>
@@ -78,8 +46,6 @@ const BarcodeScanner = () => {
 };
 
 export default BarcodeScanner;
-
-
 
 // import React, { useEffect, useRef, useState } from "react";
 // import { BrowserMultiFormatReader } from "@zxing/library";
@@ -131,7 +97,7 @@ export default BarcodeScanner;
 
 //       {/* ✅ Added autoPlay, playsInline, and muted to ensure video plays correctly */}
 //       <video ref={videoRef} className="w-64 h-64" autoPlay playsInline muted></video>
-   
+
 //       <div className="mt-2 flex gap-2 pb-3">
 //         <input
 //           type="text"
@@ -149,21 +115,6 @@ export default BarcodeScanner;
 // };
 
 // export default BarcodeScanner;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import React, { useEffect, useRef, useState } from "react";
 // import { BrowserMultiFormatReader } from "@zxing/library";
