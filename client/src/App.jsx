@@ -1,5 +1,3 @@
-
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import Navbar from "./components/Navbar";
@@ -11,11 +9,49 @@ import ExpiryForm from "./components/SidebarComponents/ExpiryForm";
 
 import "./App.css";
 import ProductPage from "./components/ProductPage";
+import { useEffect, useState } from "react";
+import { generateToken, messaging } from "./notification/Firebase";
+import { onMessage } from "firebase/messaging";
 // import Layout from "./components/Layout";
 
 
-
 function App() {
+
+
+  // useEffect(() => {
+  //   generateToken();
+  //   onMessage(messaging , (payload) => {
+  //     console.log(payload);
+  //   });
+  // } , []);
+
+  const [fcmToken, setFcmToken] = useState(null);
+
+  useEffect(() => {
+    const fetchFcmToken = async () => {
+      try {
+        const token = await generateToken();
+        setFcmToken(token);
+        console.log("FCM Token:", token);
+      } catch (err) {
+        console.error("Error getting FCM token", err);
+      }
+    };
+
+    fetchFcmToken();
+
+    // Listen for foreground messages
+    const unsubscribe = onMessage(messaging, (payload) => {
+      console.log("Received foreground message:", payload);
+    });
+
+    return () => {
+      unsubscribe(); // Cleanup the listener
+    };
+  }, []);
+
+
+
   return (
     <Router>
    

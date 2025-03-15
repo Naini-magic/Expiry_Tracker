@@ -3,8 +3,10 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./db");
-const expiryRoutes = require("./routes/expiryRoutes");
-const deleteRoute = require("./routes/deleteRoute");
+const bodyParser = require("body-parser");
+const expiryRoutes = require("./src/routes/expiryRoutes");
+const deleteRoute = require("./src/routes/deleteRoute");
+const firebaseRoutes = require("./src/routes/firebaseRoutes");
 
 
 dotenv.config();
@@ -16,6 +18,7 @@ connectDB();
 // ✅ Middleware
 app.use(express.json());
 app.use(cors());
+app.use(bodyParser.json());
 
 // ✅ Serve uploaded images
 app.use("/uploads", express.static("uploads"));
@@ -23,6 +26,7 @@ app.use("/uploads", express.static("uploads"));
 // ✅ Routes
 app.use("/api/expiry-items", expiryRoutes);
 app.use("/api/expiry-items", deleteRoute);
+app.use("/api/firebase", firebaseRoutes);
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {

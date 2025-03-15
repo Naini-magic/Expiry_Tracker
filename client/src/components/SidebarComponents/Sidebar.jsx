@@ -11,12 +11,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       ${isOpen ? "translate-x-0" : "-translate-x-full sm:translate-x-0"}`}
     >
       {/* Close Button (Only visible on small screens) */}
-      <button
+      {/* <button
         className="sm:hidden absolute top-4 right-4 text-2xl text-gray-600"
         onClick={() => setIsOpen(false)}
       >
         <FaTimes />
-      </button>
+      </button> */}
 
       {/* Sidebar Links */}
       <div className="flex flex-col items-center py-4 space-y-9 mt-10 sm:mt-0">

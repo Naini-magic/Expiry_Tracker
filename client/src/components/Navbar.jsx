@@ -22,7 +22,7 @@ const Navbar = () => {
         </div>
 
         {/* Search Bar (Hidden on Small Screens) */}
-        <div className="bg-gray-200 flex rounded-full px-4 py-2 items-center w-1/2 ">
+        <div className="bg-gray-200 flex rounded-full px-4 py-2 items-center w-1/2  ">
           <FaSearch className="text-gray-500" />
           <input
             type="text"
