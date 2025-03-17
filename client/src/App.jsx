@@ -10,9 +10,11 @@ import ExpiryForm from "./components/SidebarComponents/ExpiryForm";
 import "./App.css";
 import ProductPage from "./components/ProductPage";
 import { useEffect, useState } from "react";
-import { generateToken, messaging } from "./notification/Firebase";
+import { generateToken, messaging , onMessageListerner} from "./notification/Firebase";
 import { onMessage } from "firebase/messaging";
 // import Layout from "./components/Layout";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 function App() {
@@ -51,9 +53,23 @@ function App() {
   }, []);
 
 
+  useEffect(() => {
+    onMessageListerner()
+      .then((payload) => {
+        toast(
+          <div>
+            <div><strong>{payload.notification.title}</strong></div>
+            <div>{payload.notification.body}</div>
+          </div>
+        );
+        console.log("Received foreground message:", payload);
+      })
+      .catch((err) => console.error("Error:", err));
+  }, []);
 
   return (
     <Router>
+      <ToastContainer position="top-right" autoClose={5000} />
    
         {/* Sidebar (Fixed) */}
         <Sidebar />

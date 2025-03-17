@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getMessaging , getToken } from "firebase/messaging";
+import { getMessaging , getToken, onMessage } from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBH_IDHgGhuDcCue1MjgacDxO4qAl68r9w",
@@ -34,6 +34,15 @@ export const generateToken = async () => {
     return null;
   }
 };
+
+
+export const onMessageListerner = () => {
+  return new Promise((resolve) => {
+    onMessage(messaging , (payload) => {
+      resolve(payload);
+    })
+  })
+}
 
 // export const generateToken = async () => {
 //   const permission = await Notification.requestPermission();
