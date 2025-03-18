@@ -15,6 +15,8 @@ import { onMessage } from "firebase/messaging";
 // import Layout from "./components/Layout";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Login from "./auth/Login";
+import Register from "./auth/Register";
 
 
 function App() {
@@ -89,6 +91,8 @@ function App() {
               <Route path="/collection" element={<Collection />} />
               <Route path="/notifications" element={<Notification />} />
               <Route path="/product/:id" element={<ProductPage/>} />
+              <Route path="/login" element={<Login/>}/>
+              <Route path="/register" element={<Register/>}/>
             </Routes>
           </div>
         

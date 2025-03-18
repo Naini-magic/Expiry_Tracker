@@ -33,6 +33,9 @@ const Navbar = () => {
 
         {/* Right Section - Profile Icon */}
         <div className="flex items-center space-x-6">
+          <Link to="/login" className="text-2xl">
+                    <span className="text-sm">Login</span>
+          </Link>
           <Link className="flex flex-col items-center text-gray-600 hover:text-black">
             <FaUserCircle className="text-2xl" />
           </Link>

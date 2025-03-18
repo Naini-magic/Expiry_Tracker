@@ -6,7 +6,8 @@ const ExpiryItemSchema = new mongoose.Schema({
     expiryDate: { type: Date, required: true },
     collectionName: { type: String }, 
     notificationDays: { type: Number },
-    image: { type: String }
+    image: { type: String },
+    deviceToken : {type : String , required: true}
 });
 
 

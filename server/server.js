@@ -7,6 +7,8 @@ const bodyParser = require("body-parser");
 const expiryRoutes = require("./src/routes/expiryRoutes");
 const deleteRoute = require("./src/routes/deleteRoute");
 const firebaseRoutes = require("./src/routes/firebaseRoutes");
+const checkExpiryAndSendNotifications = require("./src/util/notificationScheduler");
+const authRoutes = require("./src/routes/authRoutes");
 
 
 dotenv.config();
@@ -27,6 +29,10 @@ app.use("/uploads", express.static("uploads"));
 app.use("/api/expiry-items", expiryRoutes);
 app.use("/api/expiry-items", deleteRoute);
 app.use("/api/firebase", firebaseRoutes);
+app.use("/api/auth" , authRoutes);
+
+// start expiry check schedular 
+checkExpiryAndSendNotifications();
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
