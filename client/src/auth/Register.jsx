@@ -46,6 +46,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { generateToken } from "../notification/Firebase";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -54,6 +55,7 @@ const Register = () => {
         password: "",
         confirmPassword: ""
     });
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -70,6 +72,7 @@ const Register = () => {
                 }
             );
             alert(response.data.message);
+            navigate("/");
         } catch (error) {
             alert(error.response?.data?.message || "Registration failed");
         }

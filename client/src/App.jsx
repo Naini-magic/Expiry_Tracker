@@ -17,6 +17,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
+import Profile from "./components/Profile";
+import EditProfile from "./auth/EditProfile";
 
 
 function App() {
@@ -93,6 +95,8 @@ function App() {
               <Route path="/product/:id" element={<ProductPage/>} />
               <Route path="/login" element={<Login/>}/>
               <Route path="/register" element={<Register/>}/>
+              {/* <Route path="/profile" element={<Profile/>}/> */}
+              <Route path="/edit-profile" element={<EditProfile/>}/>
             </Routes>
           </div>
         

@@ -35,10 +35,12 @@
 import { useState } from "react";
 import axios from "axios";
 import { generateToken } from "../notification/Firebase";
-import { Link } from "react-router-dom"; // Assuming React Router is used
+import { Link , useNavigate} from "react-router-dom"; // Assuming React Router is used
+
 
 const Login = () => {
     const [formData, setFormData] = useState({ email: "", password: "" });
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -52,7 +54,11 @@ const Login = () => {
                 ...formData,
                 deviceToken
             });
+            localStorage.setItem("user", JSON.stringify(response.data.user));
+            
             alert(response.data.message);
+            navigate("/");
+            
         } catch (error) {
             alert(error.response?.data?.message || "Login failed");
         }

@@ -24,3 +24,10 @@ dist-ssr
 *.sw?
 
 
+src/notification/Firebase
+
+
+public/firebase-messaging-sw
+
+client/localhost.crt
+client/localhost.key
