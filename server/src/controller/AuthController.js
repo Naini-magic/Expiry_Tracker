@@ -77,5 +77,34 @@ const loginUser = async( req , res) => {
 };
 
 
-module.exports = {registerUser , loginUser};
+// edit the user profile
+const editProfile = async (req, res) => {
+    const { name, email, password } = req.body;
+
+    try {
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Update fields
+        user.name = name || user.name;
+        user.email = email || user.email;
+
+        // Update password if provided
+        if (password) {
+            const salt = await bcrypt.genSalt(10);
+            user.password = await bcrypt.hash(password, salt);
+        }
+
+        await user.save();
+
+        res.json({ message: "Profile updated successfully", user });
+    } catch (error) {
+        res.status(500).json({ message: "Server error" });
+    }
+};
+
+module.exports = {registerUser , loginUser , editProfile};
     
