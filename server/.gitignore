@@ -4,3 +4,8 @@
 src/util/firebaseAdminSDK.json
 
 node_modules/
+
+
+
+localhost.crt
+localhost.key
