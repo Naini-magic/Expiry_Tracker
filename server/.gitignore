@@ -1,9 +1,1 @@
 .env
-
-# Ignore Firebase Admin SDK JSON file
-src/util/firebaseAdminSDK.json
-
-node_modules/
-
-
-
