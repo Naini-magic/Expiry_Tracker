@@ -2,46 +2,61 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
 const ExpiryItem = require("../models/ExpiryItem");
+const authmiddleware = require("../middleware/authmiddleware");
 
+// Ensure 'uploads' folder exists
+const uploadDir = "./uploads/";
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
 
 // Multer Storage Setup
 const storage = multer.diskStorage({
-  destination: "./uploads/", // Store files in "uploads" folder
+  destination: uploadDir,
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Unique filename
+    cb(null, Date.now() + path.extname(file.originalname));
   },
 });
-
 const upload = multer({ storage });
 
 
 // ✅ **Route to Add New Expiry Item**
-router.post("/", upload.single("image"), async (req, res) => {
+router.post("/", authmiddleware , upload.single("image"), async (req, res) => {
   try {
+
+    console.log("📤 Incoming Request Body:", req.body);
+    console.log("📤 Incoming Request Body:", req.body);
+    console.log("📤 Incoming File:", req.file);
     const newItem = new ExpiryItem({
       barcode: req.body.barcode,
       productName: req.body.productName,
-      expiryDate: req.body.expiryDate,
+      expiryDate: new Date(req.body.expiryDate),
       collectionName: req.body.collectionName, 
-      notificationDays: req.body.notificationDays,
+      notificationDays: Number(req.body.notificationDays),
       image: req.file ? `/uploads/${req.file.filename}` : "", // Store image path
+      userId : req.user.id,
+      deviceToken: req.body.deviceToken
     });
 
     await newItem.save();
     res.json({ message: "Item saved successfully!", item: newItem });
   } catch (error) {
+    console.error("Error details:", error); 
     res.status(500).json({ message: "Error saving item", error });
   }
 });
 
 // ✅ **Route to Get All Expiry Items**
-router.get("/", async (req, res) => {
+router.get("/", authmiddleware , async (req, res) => {
   try {
-    const items = await ExpiryItem.find();
+    console.log("User making request:", req.user);
+    const items = await ExpiryItem.find({userId : req.user.id});
     res.json(items);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message:"Server Error" ,
+      error : error.message });
   }
 });
 

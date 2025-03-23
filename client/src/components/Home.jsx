@@ -47,13 +47,6 @@
 
 
 
-
-
-
-
-
-
-
 import React, { useEffect, useState } from "react";
 import { fetchProducts, deleteProduct } from "../utils/api";
 import ProductCard from "../components/ProductCard";
@@ -65,9 +58,18 @@ const Home = () => {
   const [showModal, setShowModal] = useState(false);
  
 
+  // useEffect(() => {
+  //   fetchProducts().then(setProducts);
+  // }, []);
   useEffect(() => {
-    fetchProducts().then(setProducts);
+    const getProducts = async () => {
+      const fetchedProducts = await fetchProducts();
+      console.log("Fetched Products:", fetchedProducts); 
+      setProducts(fetchedProducts);
+    };
+    getProducts();
   }, []);
+  
 
   const confirmDelete = (id) => {
     setDeleteId(id);

@@ -3,8 +3,17 @@ import axios from "axios";
 
 // Fetch all products
 export const fetchProducts = async () => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Please log in to review items");
+    return [];
+}
+
   try {
-    const response = await axios.get("http://localhost:5000/api/expiry-items");
+    const response = await axios.get("http://localhost:5000/api/expiry-items" , {
+      headers : {Authorization: token}
+    });
+    console.log("API Response:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching products:", error);
