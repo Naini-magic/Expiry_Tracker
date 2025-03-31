@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaSearch, FaBars } from "react-icons/fa";
 import Sidebar from "./SidebarComponents/Sidebar";
@@ -6,7 +6,17 @@ import Profile from "./Profile";  // Import Profile Component
 
 const Navbar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const user = JSON.parse(localStorage.getItem("user"));
+  const [user , setUser] = useState(JSON.parse(localStorage.getItem("user")));
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setUser(JSON.parse(localStorage.getItem("user")));
+    }
+    window.addEventListener("storage" , handleStorageChange);
+    return () => {
+      window.removeEventListener("storage" , handleStorageChange);
+    };
+  } , []);
 
   return (
     <>
@@ -37,7 +47,7 @@ const Navbar = () => {
         {/* Right Section - Profile Icon & Dropdown */}
         <div className="flex items-center space-x-6 relative">
           {!user ? (
-            <Link to="/login" className="text-sm text-gray-700 hover:text-black">
+            <Link to="/login" className="text-md text-gray-700 font-bold hover:text-black hover:text-lg">
               Login
             </Link>
           ) : (

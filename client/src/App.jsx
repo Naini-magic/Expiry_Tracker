@@ -91,6 +91,7 @@ function App() {
               <Route path="/add-item" element={<AddItem />} />
               <Route path="/expiry-form/:barcode?" element={<ExpiryForm/>} />
               <Route path="/collection" element={<Collection />} />
+              <Route path="/collection/:name" element={<Collection/>}/>
               <Route path="/notifications" element={<Notification />} />
               <Route path="/product/:id" element={<ProductPage/>} />
               <Route path="/login" element={<Login/>}/>

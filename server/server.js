@@ -5,7 +5,6 @@ const dotenv = require("dotenv");
 const connectDB = require("./db");
 const bodyParser = require("body-parser");
 const expiryRoutes = require("./src/routes/expiryRoutes");
-const deleteRoute = require("./src/routes/deleteRoute");
 const firebaseRoutes = require("./src/routes/firebaseRoutes");
 const checkExpiryAndSendNotifications = require("./src/util/notificationScheduler");
 const authRoutes = require("./src/routes/authRoutes");
@@ -27,7 +26,6 @@ app.use("/uploads", express.static("uploads"));
 
 // ✅ Routes
 app.use("/api/expiry-items", expiryRoutes);
-app.use("/api/expiry-items", deleteRoute);
 app.use("/api/firebase", firebaseRoutes);
 app.use("/api/auth" , authRoutes);
 

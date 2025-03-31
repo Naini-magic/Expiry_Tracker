@@ -3,15 +3,18 @@ import axios from "axios";
 
 // Fetch all products
 export const fetchProducts = async () => {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    alert("Please log in to review items");
-    return [];
-}
-
+  
   try {
+    const token = localStorage.getItem('token');
+
+    if(!token){
+      throw new Error("No authentication token found. Please log in.");
+    }
     const response = await axios.get("http://localhost:5000/api/expiry-items" , {
-      headers : {Authorization: token}
+      headers: {
+        Authorization: `Bearer ${token}`,  // Pass the token in Authorization header
+        'Content-Type': 'application/json',
+    },
     });
     console.log("API Response:", response.data);
     return response.data;
@@ -24,8 +27,19 @@ export const fetchProducts = async () => {
 // Fetch collections
 export const fetchCollections = async () => {
   try {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      throw new Error("No authentication token found. Please log in.");
+    }
     const response = await axios.get(
-      "http://localhost:5000/api/expiry-items/collections"
+      "http://localhost:5000/api/expiry-items/collections",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response.data;
   } catch (error) {
@@ -37,13 +51,37 @@ export const fetchCollections = async () => {
 // Fetch products by collection name
 export const fetchProductsByCollection = async (collectionName) => {
   try {
-    const response = await axios.get(
-      `http://localhost:5000/api/expiry-items/collection/${collectionName}`
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching products:", error);
+    const res = await axios.get(`http://localhost:5000/api/expiry-items/collection/${collectionName}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+    console.log("✅ API Response:", res); // Add logging
+
+    if (!res.data || typeof res.data !== "object") {
+      throw new Error("Invalid response format");
+    }
+    return res.data;
+  } catch (err) {
+    console.error("Error fetching collection products:", err.response?.data || err.message);
     return [];
+  }
+};
+
+
+// specific item details
+export const fetchProductDetails = async (productId, token) => {
+  try {
+      const response = await axios.get(`http://localhost:5000/api/expiry-items/${productId}`, {
+          headers: {
+              Authorization: `Bearer ${token}`, // Make sure token is provided
+          },
+      });
+      return response.data;
+  } catch (error) {
+      console.error('Error fetching product details:', error);
+      throw error;
   }
 };
 

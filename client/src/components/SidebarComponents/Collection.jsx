@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { fetchProducts, fetchCollections, deleteProduct, fetchProductsByCollection } from "../../utils/api";
+import { fetchCollections, deleteProduct, fetchProductsByCollection } from "../../utils/api";
 import ProductCard from "../ProductCard";
 import DeleteModal from "../DeleteModal";
+import { useNavigate , useParams} from "react-router-dom";
 
 const Collection = () => {
   const [collections, setCollections] = useState([]);
@@ -9,6 +10,8 @@ const Collection = () => {
   const [products, setProducts] = useState([]);
   const [deleteId, setDeleteId] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+  const {collectionName} = useParams();
 
   // ✅ Fetch collections from API
   useEffect(() => {
@@ -17,16 +20,36 @@ const Collection = () => {
       .catch((err) => console.error("Error fetching collections:", err));
   }, []);
 
+  useEffect(() => {
+    if (collectionName) {
+      handleFetchProducts(collectionName);
+    } else {
+      setProducts([]);
+      setSelectedCollection(null);
+    }
+  }, [collectionName]);
+
   // ✅ Fetch products from API when a collection is selected
   const handleFetchProducts = async (collectionName) => {
     setSelectedCollection(collectionName);
     try {
       const data = await fetchProductsByCollection(collectionName);
+      console.log("Fetched Data:", data);
+      if (!Array.isArray(data)) {
+        console.error("Invalid data format:", data);
+        setProducts([]);  
+        return;
+      }
       setProducts(data);
+      if (!collectionName) {
+        navigate(`/collection/${collectionName}`);
+      }
     } catch (err) {
       console.error("Error fetching products:", err);
+      setProducts([]); // Prevents map error
     }
   };
+  
 
   // ✅ Function to confirm delete
   const confirmDelete = (id) => {

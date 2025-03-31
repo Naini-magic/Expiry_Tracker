@@ -106,5 +106,20 @@ const editProfile = async (req, res) => {
     }
 };
 
-module.exports = {registerUser , loginUser , editProfile};
     
+
+
+
+
+// logout route
+const logOut = async (req, res) => {
+    const token = req.header("Authorization")?.split(" ")[1]; // Extract token from header
+    if (!token) return res.status(400).json({ message: "No token provided" });
+
+    blacklist.add(token); // Blacklist the token
+    res.json({ message: "Logged out successfully" });
+};
+
+
+
+module.exports = {registerUser , loginUser , editProfile , logOut};
