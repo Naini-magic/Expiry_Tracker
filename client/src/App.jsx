@@ -1,14 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./components/Home";
-import Navbar from "./components/Navbar";
+import Home from "./components/Pages/Home";
+import Navbar from "./components/NavbarSection/Navbar";
 import Sidebar from "./components/SidebarComponents/Sidebar";
 import AddItem from "./components/SidebarComponents/AddItem";
 import Collection from "./components/SidebarComponents/Collection";
-import Notification from "./components/SidebarComponents/Notification";
 import ExpiryForm from "./components/SidebarComponents/ExpiryForm";
 
 import "./App.css";
-import ProductPage from "./components/ProductPage";
+import ProductPage from "./components/Pages/ProductPage";
 import { useEffect, useState } from "react";
 import { generateToken, messaging , onMessageListerner} from "./notification/Firebase";
 import { onMessage } from "firebase/messaging";
@@ -17,8 +16,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
-import Profile from "./components/Profile";
 import EditProfile from "./auth/EditProfile";
+import ExpiriedItem from "./components/Pages/ExpiriedItem";
 
 
 function App() {
@@ -92,7 +91,7 @@ function App() {
               <Route path="/expiry-form/:barcode?" element={<ExpiryForm/>} />
               <Route path="/collection" element={<Collection />} />
               <Route path="/collection/:name" element={<Collection/>}/>
-              <Route path="/notifications" element={<Notification />} />
+              <Route path="/expiriedItem" element={<ExpiriedItem />} />
               <Route path="/product/:id" element={<ProductPage/>} />
               <Route path="/login" element={<Login/>}/>
               <Route path="/register" element={<Register/>}/>

@@ -65,7 +65,7 @@ const Register = () => {
         e.preventDefault();
         try {
             const deviceToken = await generateToken();
-            const response = await axios.post("http://localhost:5000/api/auth/register", 
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/register`, 
                 {
                     ...formData,
                     deviceToken

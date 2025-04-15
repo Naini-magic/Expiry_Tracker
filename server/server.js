@@ -8,6 +8,7 @@ const expiryRoutes = require("./src/routes/expiryRoutes");
 const firebaseRoutes = require("./src/routes/firebaseRoutes");
 const checkExpiryAndSendNotifications = require("./src/util/notificationScheduler");
 const authRoutes = require("./src/routes/authRoutes");
+const fileUpload = require("express-fileupload");
 
 
 dotenv.config();
@@ -20,6 +21,9 @@ connectDB();
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
+app.use(fileUpload({
+  useTempFiles:true
+}))
 
 // ✅ Serve uploaded images
 app.use("/uploads", express.static("uploads"));

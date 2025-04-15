@@ -10,6 +10,7 @@ export default function ExpiryForm() {
   const [collectionName, setCollectionName] = useState("");
   const [notificationDays, setNotificationDays] = useState("");
   const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [barcodeValue, setBarcodeValue] = useState("");
   const [collections, setCollections] = useState([]); // ✅ Store fetched collections
   const navigate = useNavigate();
@@ -32,11 +33,29 @@ export default function ExpiryForm() {
     const file = e.target.files[0];
     if (file) {
       setImage(file);
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+      // Validation
+  if (!productName.trim()) {
+    alert("Product name is required");
+    return;
+  }
+
+  if (!expiryDate) {
+    alert("Expiry date is required");
+    return;
+  }
+
+  if (!collectionName.trim()) {
+    alert("Collection is required");
+    return;
+  }
 
     const token = localStorage.getItem("token");
     if (!token) {
@@ -64,12 +83,16 @@ export default function ExpiryForm() {
     }
 
     try {
-      const response = await axios.post("http://localhost:5000/api/expiry-items", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/expiry-items`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       alert("Expiry item saved!");
       console.log(response.data);
 
@@ -129,30 +152,34 @@ export default function ExpiryForm() {
       {/* Collection Name (Dropdown + Input) */}
       <div className="mb-4">
         <label className="block text-sm font-semibold">Collection Name</label>
-        <select
-          value={collectionName}
-          onChange={(e) => setCollectionName(e.target.value)}
-          className="w-full p-2 border rounded mb-2"
-        >
-          <option value="">Select Collection</option>
-          {collections.map((col) => (
-            <option key={col} value={col}>
-              {col}
-            </option>
-          ))}
-        </select>
-        <input
-          type="text"
-          placeholder="Or enter a new collection"
-          value={collectionName}
-          onChange={(e) => setCollectionName(e.target.value)}
-          className="w-full p-2 border rounded"
-        />
+        <div className="flex gap-2">
+          <select
+            value={collectionName}
+            onChange={(e) => setCollectionName(e.target.value)}
+            className="w-1/2 p-2 border rounded"
+          >
+            <option value="">Select Collection</option>
+            {collections.map((col) => (
+              <option key={col} value={col}>
+                {col}
+              </option>
+            ))}
+          </select>
+          <input
+            type="text"
+            placeholder="Or enter a new collection"
+            value={collectionName}
+            onChange={(e) => setCollectionName(e.target.value)}
+            className="w-1/2 p-2 border rounded"
+          />
+        </div>
       </div>
 
       {/* Notification Days */}
       <div className="mb-4">
-        <label className="block text-sm font-semibold">Notify Before (days)</label>
+        <label className="block text-sm font-semibold">
+          Notify Before (days)
+        </label>
         <input
           type="number"
           value={notificationDays}
@@ -163,44 +190,34 @@ export default function ExpiryForm() {
 
       {/* Image Upload */}
       <div className="mb-4">
-        <label className="block text-sm font-semibold">Product Image (Optional)</label>
-        <input type="file" accept="image/*" onChange={handleImageUpload} className="mt-2" />
-        {image && <img src={image} alt="Preview" className="mt-2 w-full h-40 object-cover rounded" />}
+        <label className="block text-sm font-semibold">
+          Product Image (Optional)
+        </label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageUpload}
+          className="mt-2"
+        />
+        {imagePreview && (
+          <img
+            src={imagePreview}
+            alt="Preview"
+            className="mt-2 w-full h-40 object-cover rounded"
+          />
+        )}
       </div>
 
       {/* Save Button */}
-      <button onClick={handleSubmit} className="w-full bg-black text-white py-2 rounded-lg">
+      <button
+        onClick={handleSubmit}
+        className="w-full bg-black text-white py-2 rounded-lg"
+      >
         Save Expiry Item
       </button>
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import { useState, useEffect } from "react";
 // import { useNavigate, useParams } from "react-router-dom";
@@ -215,7 +232,7 @@ export default function ExpiryForm() {
 //   const [image, setImage] = useState(null);
 //   const [barcodeValue, setBarcodeValue] = useState("");
 //   const navigate = useNavigate();
- 
+
 //   useEffect(() => {
 //     if (barcode) {
 //       setBarcodeValue(barcode); // Set barcode automatically
@@ -228,11 +245,10 @@ export default function ExpiryForm() {
 //       setImage(file);
 //     }
 //   };
-  
 
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
-  
+
 //     const token = localStorage.getItem("token");
 //     if(!token){
 //       alert("Please log in to add items");
@@ -245,7 +261,6 @@ export default function ExpiryForm() {
 //       return;
 //     }
 
-
 //     const formData = new FormData();
 //     formData.append("barcode", barcodeValue);
 //     formData.append("productName", productName);
@@ -256,16 +271,16 @@ export default function ExpiryForm() {
 //     if (image) {
 //       formData.append("image", image);
 //     }
-  
+
 //     try {
 //       const response = await axios.post("http://localhost:5000/api/expiry-items", formData, {
 //         headers: { "Content-Type": "multipart/form-data",
-//           Authorization: `Bearer ${token}` 
+//           Authorization: `Bearer ${token}`
 //          }
 //       });
 //       alert("Expiry item saved!");
 //       console.log(response.data);
- 
+
 //     setProductName("");
 //     setExpiryDate("");
 //     setCollectionName("");
@@ -273,13 +288,12 @@ export default function ExpiryForm() {
 //     setImage(null);
 //     setBarcodeValue("");
 //     navigate("/");
- 
+
 //     } catch (error) {
 //       console.error("Error saving item", error);
 //       alert("Failed to save item.");
 //     }
 //   };
-  
 
 //   return (
 //     <div className="max-w-md mx-auto p-4 bg-gray-100 rounded-lg shadow-lg">
@@ -359,5 +373,3 @@ export default function ExpiryForm() {
 //     </div>
 //   );
 // }
-
-

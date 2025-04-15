@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchCollections, deleteProduct, fetchProductsByCollection } from "../../utils/api";
-import ProductCard from "../ProductCard";
-import DeleteModal from "../DeleteModal";
+import ProductCard from "../Pages/ProductCard";
+import DeleteModal from "../Pages/DeleteModal";
 import { useNavigate , useParams} from "react-router-dom";
 
 const Collection = () => {
@@ -13,7 +13,7 @@ const Collection = () => {
   const navigate = useNavigate();
   const {collectionName} = useParams();
 
-  // ✅ Fetch collections from API
+  // Fetch collections from API
   useEffect(() => {
     fetchCollections()
       .then(setCollections)
@@ -29,7 +29,7 @@ const Collection = () => {
     }
   }, [collectionName]);
 
-  // ✅ Fetch products from API when a collection is selected
+  // Fetch products from API when a collection is selected
   const handleFetchProducts = async (collectionName) => {
     setSelectedCollection(collectionName);
     try {
@@ -51,13 +51,13 @@ const Collection = () => {
   };
   
 
-  // ✅ Function to confirm delete
+  // Function to confirm delete
   const confirmDelete = (id) => {
     setDeleteId(id);
     setShowModal(true);
   };
 
-  // ✅ Function to delete product
+  // Function to delete product
   const handleDelete = async () => {
     if (!deleteId) return;
     try {
@@ -73,11 +73,11 @@ const Collection = () => {
   return (
     <div className="p-4">
       <h2 className="text-xl font-bold">Collections</h2>
-      <div className="flex gap-2">
+      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:items-center ">
         {collections.map((col) => (
           <button
             key={col}
-            className="bg-gray-300 text-gray-500 font-bold px-4 py-2 rounded hover:bg-gray-400"
+            className="bg-gray-300 text-gray-500 font-bold px-4 py-2 rounded transition-all duration-300 hover:bg-gray-400 w-2xs h-24 hover:text-white  hover:border-gray-300 hover:scale-[1.05]"
             onClick={() => handleFetchProducts(col)}
           >
             {col}
