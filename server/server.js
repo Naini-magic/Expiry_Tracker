@@ -42,3 +42,21 @@ app.listen(PORT, () => {
 }).on("error", (err) => {
   console.error("❌ Server failed to start:", err.message);
 });
+
+
+// # Environment files
+// .env
+// client/.env
+// server/.env
+
+// # SSL Certificates
+// client/localhost.crt
+// client/localhost.key
+
+
+// # Node modules
+// client/node_modules/
+// server/node_modules/
+
+// # Firebase secrets
+// /server/src/util/firebaseAdminSDK.json
