@@ -12,7 +12,7 @@ const firebaseConfig = {
   measurementId: "G-163BXXTJHX"
 };
 
-const vapidKey = "BLNesWUbMEp2KyMoR8sEPBFgkBfqhb9mePxZDatOXxznmiCpjH34DnA5WhS8dC2rluAA6t868MSJ7AIMfYvNbtg";
+const vapidKey = import.meta.env.VITE_FIREBASE_VAPID_KEY;
 
 const app = initializeApp(firebaseConfig);
 export const messaging = getMessaging(app);
