@@ -1,7 +1,11 @@
+
+
+
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { FaSearch, FaSpinner } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const SearchItems = () => {
   const [query, setQuery] = useState("");
@@ -29,7 +33,7 @@ const SearchItems = () => {
         )}`,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+            Authorization: `Bearer ${Cookies.get("token") || ""}`, // Use Cookies.get("token") instead of localStorage
           },
         }
       );

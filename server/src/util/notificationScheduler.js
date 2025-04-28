@@ -2,6 +2,8 @@ const cron = require("node-cron");
 const ExpiryItem = require("../models/ExpiryItem");
 const NotificationService = require("../service/NotificationService");
 
+
+
 const checkExpiryAndSendNotifications = async () => {
     try {
         const today = new Date();
@@ -33,3 +35,14 @@ const checkExpiryAndSendNotifications = async () => {
 cron.schedule("0 8 * * *", checkExpiryAndSendNotifications);
 
 module.exports = checkExpiryAndSendNotifications;
+
+
+
+
+
+
+
+
+
+
+

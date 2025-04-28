@@ -10,14 +10,22 @@ cloudinary.config({
 // ✅ Add new item
 const addItem = async (req, res) => {
   try {
-    // console.log("📤 Incoming Request Body:", req.body);
-    // console.log("📤 Incoming File:", req.file);
-    if (!req.files || !req.files.image) {
-      return res.status(400).json({ message: "No file uploaded" });
-    }
+   
+    // if (!req.files || !req.files.image) {
+    //   return res.status(400).json({ message: "No file uploaded" });
+    // }
 
-    const imageFile = req.files.image;
-    const uploadResult = await cloudinary.uploader.upload(imageFile.tempFilePath);
+    // const imageFile = req.files.image;
+    // const uploadResult = await cloudinary.uploader.upload(imageFile.tempFilePath);
+
+    let imageUrl = null; // Default to null if no image is uploaded
+
+    // Check if image was uploaded
+    if (req.files && req.files.image) {
+      const imageFile = req.files.image;
+      const uploadResult = await cloudinary.uploader.upload(imageFile.tempFilePath);
+      imageUrl = uploadResult.secure_url;
+    }
 
     
     const newItem = new ExpiryItem({
@@ -26,7 +34,7 @@ const addItem = async (req, res) => {
       expiryDate: new Date(req.body.expiryDate), // ✅ Ensure expiryDate is stored as Date
       collectionName: req.body.collectionName,
       notificationDays: Number(req.body.notificationDays),
-      image: uploadResult.secure_url,
+      image: imageUrl,
       userId: req.user.id,
       deviceToken: req.body.deviceToken,
     });
@@ -124,6 +132,7 @@ const editItem = async (req, res) => {
       collectionName,
       notificationDays,
     } = req.body;
+
     const existingProduct = await ExpiryItem.findById(req.params.id);
 
     if (!existingProduct) {
@@ -132,7 +141,7 @@ const editItem = async (req, res) => {
 
     existingProduct.barcode = barcode;
     existingProduct.productName = productName;
-    existingProduct.expiryDate = new Date(expiryDate); // ✅ Ensure expiryDate is stored as Date
+    existingProduct.expiryDate = new Date(expiryDate); 
     existingProduct.collectionName = collectionName;
     existingProduct.notificationDays = notificationDays;
 
@@ -194,45 +203,6 @@ const SearchItem = async (req, res) => {
   }
 };
 
-// const SearchItem = async (req, res) => {
-//   try {
-//     const { query } = req.query;
-//     if (!query) {
-//       return res.status(400).json({ message: "Search query is required" });
-//     }
-
-//     const userId = req.user.id;
-//     const limit = parseInt(req.query.limit) || 10; // Add pagination limit
-
-//     // Perform search with better barcode handling
-//     const items = await ExpiryItem.find({
-//       userId,
-//       $or: [
-//         { productName: { $regex: query, $options: "i" } },
-//         { barcode: { $regex: `^${query}`, $options: "i" } }, // Partial match for barcode
-//       ],
-//     })
-//       .sort({ expiryDate: 1 }) // Sort by expiry date (soonest first)
-//       .limit(limit); // Limit results
-
-//     // Add expiry status to each item
-//     const enhancedItems = items.map((item) => {
-//       const isExpired = new Date(item.expiryDate) < new Date();
-//       return {
-//         ...item.toObject(),
-//         isExpired,
-//       };
-//     });
-
-//     res.json(enhancedItems);
-//   } catch (error) {
-//     console.error("Search error:", error);
-//     res.status(500).json({
-//       message: "Server Error",
-//       error: process.env.NODE_ENV === "development" ? error.message : undefined,
-//     });
-//   }
-// };
 
 const expiredItem = async (req, res) => {
   try {

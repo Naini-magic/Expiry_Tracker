@@ -27,7 +27,7 @@ const BarcodeScanner = () => {
         console.error("Barcode scanning error:", err);
       }
     };
-
+   
     startScanner();
 
     return () => {
@@ -69,3 +69,6 @@ const BarcodeScanner = () => {
 };
 
 export default BarcodeScanner;
+
+
+

@@ -61,7 +61,7 @@ const Home = () => {
   // style={{ background: "#0A0A32" }} // Soft light gray -- color #f5f5f5
   // style={{ background: "#f5f5f5" }} // Soft light gray -- color #f5f5f5
 >
-  <div
+  {/* <div
     className="text-5xl font-bold p-2 flex flex-col items-center text-center"
     style={{
       background: "linear-gradient(141deg, #d9d9d9, #3A3A80)",
@@ -73,6 +73,19 @@ const Home = () => {
   >
     Never Let Your Essentials Expire Again!
     <span className="text-4xl mt-2">Track & Manage Easily</span>
+  </div> */}
+    <div
+    className="text-3xl sm:text-4xl md:text-5xl font-bold p-2 flex flex-col items-center text-center"
+    style={{
+      background: "linear-gradient(141deg, #d9d9d9, #3A3A80)",
+      WebkitTextFillColor: "transparent",
+      WebkitBackgroundClip: "text",
+      backgroundClip: "text",
+      lineHeight: "2.5rem sm:3rem",
+    }}
+  >
+    Never Let Your Essentials Expire Again!
+    <span className="text-2xl sm:text-3xl md:text-4xl mt-2">Track & Manage Easily</span>
   </div>
 </div>
      

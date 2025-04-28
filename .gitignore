@@ -4,12 +4,9 @@ node_modules/
 client/localhost.crt
 client/localhost.key
 
-# Node modules
-client/node_modules/
-server/node_modules/
 
 # Firebase config
-server/src/util/firebaseAdminSDK.json
+server/src/util/firebase_AdminSDK.json
 
 # Environment files
 .env

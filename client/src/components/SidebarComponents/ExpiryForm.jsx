@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { fetchCollections } from "../../utils/api";
+import { generateToken } from "../../notification/Firebase";
+import Cookies from "js-cookie";
+
 
 export default function ExpiryForm() {
   const { barcode } = useParams();
@@ -57,17 +60,25 @@ export default function ExpiryForm() {
     return;
   }
 
-    const token = localStorage.getItem("token");
+  
+    const token = Cookies.get("token");
     if (!token) {
       alert("Please log in to add items");
       return;
     }
 
-    const deviceToken = localStorage.getItem("deviceToken");
+   // Get fresh device token
+  let deviceToken;
+  try {
+    deviceToken = await generateToken(); // Import this from your firebase.js
     if (!deviceToken) {
-      alert("Device token missing!");
-      return;
+      throw new Error("Failed to get device token");
     }
+  } catch (error) {
+    console.error("Error getting device token:", error);
+    alert("Failed to get device token. Please refresh the page.");
+    return;
+  }
 
     const trimmedCollectionName = collectionName.trim(); // ✅ Trim spaces before saving
 

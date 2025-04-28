@@ -9,8 +9,8 @@ import ExpiryForm from "./components/SidebarComponents/ExpiryForm";
 import "./App.css";
 import ProductPage from "./components/Pages/ProductPage";
 import { useEffect, useState } from "react";
-import { generateToken, messaging , onMessageListerner} from "./notification/Firebase";
-import { onMessage } from "firebase/messaging";
+import { generateToken, messaging , onMessageListener} from "./notification/Firebase";
+// import { onMessage } from "firebase/messaging";
 // import Layout from "./components/Layout";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -23,14 +23,23 @@ import ExpiriedItem from "./components/Pages/ExpiriedItem";
 function App() {
 
 
-  // useEffect(() => {
-  //   generateToken();
-  //   onMessage(messaging , (payload) => {
-  //     console.log(payload);
-  //   });
-  // } , []);
 
   const [fcmToken, setFcmToken] = useState(null);
+
+
+
+  // newly added
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/firebase-messaging-sw.js')
+        .then((registration) => {
+          console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch((err) => {
+          console.error('Service Worker registration failed:', err);
+        });
+    }
+  }, []);
 
   useEffect(() => {
     const fetchFcmToken = async () => {
@@ -44,20 +53,13 @@ function App() {
     };
 
     fetchFcmToken();
-
-    // Listen for foreground messages
-    const unsubscribe = onMessage(messaging, (payload) => {
-      console.log("Received foreground message:", payload);
-    });
-
-    return () => {
-      unsubscribe(); // Cleanup the listener
-    };
+    
+  
   }, []);
 
 
   useEffect(() => {
-    onMessageListerner()
+    onMessageListener()
       .then((payload) => {
         toast(
           <div>
@@ -70,6 +72,11 @@ function App() {
       .catch((err) => console.error("Error:", err));
   }, []);
 
+  
+
+
+
+  
   return (
     <Router>
       <ToastContainer position="top-right" autoClose={5000} />

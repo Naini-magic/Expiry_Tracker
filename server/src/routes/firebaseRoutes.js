@@ -9,5 +9,4 @@ const router = express.Router();
 // })
 router.post("/send-notification", sendFirebaseNotification);
 
-
 module.exports = router;

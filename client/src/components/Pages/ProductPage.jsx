@@ -4,6 +4,8 @@ import axios from "axios";
 import DeleteModal from "./DeleteModal";
 import { deleteProduct, fetchProductDetails } from "../../utils/api";
 import { getDaysLeft } from "../../utils/api";
+import Cookies from "js-cookie"; // Import js-cookie
+
 
 const ProductPage = () => {
   const { id } = useParams();
@@ -14,7 +16,8 @@ const ProductPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedProduct, setEditedProduct] = useState({});
   const [showModal, setShowModal] = useState(false);
-  const token = localStorage.getItem('token');
+  const token = Cookies.get('token');
+
 
   // Fetch product details
   useEffect(() => {

@@ -1,35 +1,93 @@
+// import { initializeApp } from 'firebase/app';
+// import { getMessaging, onBackgroundMessage } from 'firebase/messaging';
 
-importScripts('https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js');
-importScripts('https://www.gstatic.com/firebasejs/10.13.2/firebase-messaging-compat.js');
+// // Your Firebase project configuration
+// const firebaseConfig = {
+//   apiKey: "AIzaSyBtWqbKVlPF9AbNx9PjuYJGqJ-cEm8ZN9Q",
+//   authDomain: "expirytracker-notification.firebaseapp.com",
+//   projectId: "expirytracker-notification",
+//   storageBucket: "expirytracker-notification.firebasestorage.app",
+//   messagingSenderId: "514869228592",
+//   appId: "1:514869228592:web:7d49f29ac6bfbd6bd069f5",
+//   measurementId: "G-163BXXTJHX"
+// };
+
+// // Initialize Firebase
+// const app = initializeApp(firebaseConfig);
+
+// // Initialize Firebase Messaging
+// const messaging = getMessaging(app);
+
+// // Set up background message handler
+// onBackgroundMessage(messaging, (payload) => {
+//   console.log('Received background message', payload);
+
+//   // Customize notification here
+//   const notificationTitle = payload.notification.title;
+//   const notificationOptions = {
+//     body: payload.notification.body,
+//     icon: payload.notification.image,
+//   };
+
+//   self.registration.showNotification(notificationTitle, notificationOptions);
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+importScripts(
+  "https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"
+);
+importScripts(
+  "https://www.gstatic.com/firebasejs/10.13.2/firebase-messaging-compat.js"
+);
+
+
 
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
+  apiKey: "AIzaSyBtWqbKVlPF9AbNx9PjuYJGqJ-cEm8ZN9Q",
+  authDomain: "expirytracker-notification.firebaseapp.com",
+  projectId: "expirytracker-notification",
+  // storageBucket: "expirytracker-notification.appspot.com",
+  storageBucket: "expirytracker-notification.appspot.com",
+  messagingSenderId: "514869228592",
+  appId: "1:514869228592:web:7d49f29ac6bfbd6bd069f5",
+  measurementId: "G-163BXXTJHX"
 };
 
-// Retrieve an instance of Firebase Messaging so that it can handle background
-// messages.
+firebase.initializeApp(firebaseConfig);
+
 const messaging = firebase.messaging();
 
+messaging.onBackgroundMessage(function (payload) {
+  console.log('Received background message', payload);
 
 
-messaging.onBackgroundMessage((payload) => {
-    console.log(
-      '[firebase-messaging-sw.js] Received background message ',
-      payload
-    );
-    // Customize notification here
-    const notificationTitle = payload.notification.title;
-    const notificationOptions = {
-      body: payload.notification.body,
-      icon: payload.notification.image,
-    };
-  
-    self.registration.showNotification(notificationTitle, notificationOptions);
-  });
+  // Customize notification here
+  const notificationTitle = payload.notification.title;
+  const notificationOptions = {
+    body: payload.notification.body,
+    icon: payload.notification.image,
+  };
+
+  self.registration.showNotification(notificationTitle, notificationOptions);
+});
+
+

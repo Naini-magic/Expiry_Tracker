@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import { generateToken } from "../notification/Firebase";
 
 const EditProfile = () => {
     const [formData, setFormData] = useState({
@@ -14,7 +16,8 @@ const EditProfile = () => {
 
     // Fetch user data from localStorage when the component loads
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem("user"));
+        const user = JSON.parse(Cookies.get("user") || "{}");
+        // const user = JSON.parse(localStorage.getItem("user"));
         if (user) {
             setFormData({
                 name: user.name,
@@ -38,17 +41,27 @@ const EditProfile = () => {
         }
 
         try {
-            const token = localStorage.getItem("token");
+            const token = Cookies.get("token");
+             
+            let deviceToken = localStorage.getItem("deviceToken"); // <-- Check if already exists
+            if (!deviceToken) {
+              deviceToken = await generateToken();
+              localStorage.setItem("deviceToken", deviceToken); // <-- Save if newly generated
+            }
+
             const response = await axios.put(
                 `${import.meta.env.VITE_BACKEND_URL}/api/auth/edit-profile`,
-                formData,
+                { ...formData, deviceToken },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
+    
 
             alert(response.data.message);
 
             // Update user details in localStorage
-            localStorage.setItem("user", JSON.stringify(response.data.user));
+            // localStorage.setItem("user", JSON.stringify(response.data.user));
+            Cookies.set("user", JSON.stringify(response.data.user), { expires: 30 });
+
 
             navigate("/");
         } catch (error) {
