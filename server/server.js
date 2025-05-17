@@ -82,7 +82,7 @@ connectDB()
     // ✅ Middleware
     app.use(express.json());
     app.use(cors({
-      origin: 'http://localhost:5173', // frontend origin
+      origin: 'https://expiry-tracker-ui-za1l.onrender.com', // frontend origin
       credentials: true,               // allow cookies
     }));
     app.use(bodyParser.json());
