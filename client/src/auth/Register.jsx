@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import axios from "axios";
 import { generateToken } from "../notification/Firebase";
@@ -12,21 +11,45 @@ const Register = () => {
     password: "",
     confirmPassword: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const requestNotificationPermission = async () => {
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission !== "granted") {
+        alert("Please enable notifications for better experience");
+      }
+      return permission === "granted";
+    } catch (error) {
+      console.error("Error requesting notification permission:", error);
+      return false;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    
     try {
+      // Request notification permission first
+      const hasPermission = await requestNotificationPermission();
+      if (!hasPermission) {
+        setIsLoading(false);
+        return;
+      }
+
       const deviceToken = await generateToken();
       console.log("devicetoken", deviceToken);
       localStorage.setItem("deviceToken", deviceToken);
 
       if (formData.password !== formData.confirmPassword) {
         alert("Passwords do not match!");
+        setIsLoading(false);
         return;
       }
       
@@ -40,14 +63,14 @@ const Register = () => {
 
       Cookies.set("token", response.data.token, { expires: 30 });
       Cookies.set("user", JSON.stringify(response.data.user), { expires: 30 });
-      // localStorage.setItem("user", JSON.stringify(response.data.user));
-      // localStorage.setItem("token", response.data.token);
       console.log("User Cookie:", Cookies.get("user"));
 
       alert(response.data.message);
       navigate("/");
     } catch (error) {
       alert(error.response?.data?.message || "Registration failed");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -92,9 +115,38 @@ const Register = () => {
           />
           <button
             type="submit"
-            className="w-full bg-gray-500 text-white py-2 rounded-md hover:bg-gray-600 transition duration-200"
+            disabled={isLoading}
+            className={`w-full ${
+              isLoading ? "bg-gray-400" : "bg-gray-500 hover:bg-gray-600"
+            } text-white py-2 rounded-md transition duration-200 flex justify-center items-center`}
           >
-            Sign up
+            {isLoading ? (
+              <>
+                <svg
+                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Processing...
+              </>
+            ) : (
+              "Sign up"
+            )}
           </button>
         </form>
       </div>
