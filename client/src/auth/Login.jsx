@@ -33,9 +33,10 @@ const Login = () => {
       Cookies.set("token", response.data.token, { expires: 30 });
       Cookies.set("user", JSON.stringify(response.data.user), { expires: 30 });
 
-       toast.success(response.data.message || "Login successful!", {
-        onClose: () => navigate("/") // Navigate after toast closes
-      });
+      toast.success(response.data.message || "Login successful!");
+      setTimeout(() => navigate("/"), 1500);
+
+
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed");
     } finally {
@@ -45,20 +46,7 @@ const Login = () => {
 
   return (
     <section className="flex justify-center min-h-screen bg-gray-100">
-      {/* Toast Container */}
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
-      
+
       <div className="w-full max-w-md bg-gray-200 p-6 rounded-lg shadow-md mt-28 h-1/2">
         <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">
           Login
