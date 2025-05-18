@@ -240,7 +240,7 @@ import axios from "axios";
 import { fetchCollections } from "../../utils/api";
 import { generateToken } from "../../notification/Firebase";
 import Cookies from "js-cookie";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function ExpiryForm() {
@@ -373,18 +373,6 @@ export default function ExpiryForm() {
   return (
     <div className="max-w-md mx-auto p-4 bg-gray-100 rounded-lg shadow-lg">
       {/* Toast Container - should be at the root level */}
-      <ToastContainer 
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
       
       <h2 className="text-xl font-bold mb-4">Add Expiry Item</h2>
 

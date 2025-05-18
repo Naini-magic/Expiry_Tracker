@@ -3,6 +3,7 @@ import axios from "axios";
 import { generateToken } from "../notification/Firebase";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -22,7 +23,7 @@ const Register = () => {
     try {
       const permission = await Notification.requestPermission();
       if (permission !== "granted") {
-        alert("Please enable notifications for better experience");
+        toast.warning("Please enable notifications for a better experience");
       }
       return permission === "granted";
     } catch (error) {
@@ -34,7 +35,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    
+
     try {
       // Request notification permission first
       const hasPermission = await requestNotificationPermission();
@@ -48,11 +49,11 @@ const Register = () => {
       localStorage.setItem("deviceToken", deviceToken);
 
       if (formData.password !== formData.confirmPassword) {
-        alert("Passwords do not match!");
+        toast.error("Passwords do not match!");
         setIsLoading(false);
         return;
       }
-      
+
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/auth/register`,
         {
@@ -65,10 +66,10 @@ const Register = () => {
       Cookies.set("user", JSON.stringify(response.data.user), { expires: 30 });
       console.log("User Cookie:", Cookies.get("user"));
 
-      alert(response.data.message);
+      toast.success(response.data.message);
       navigate("/");
     } catch (error) {
-      alert(error.response?.data?.message || "Registration failed");
+      toast.error(error.response?.data?.message || "Registration failed");
     } finally {
       setIsLoading(false);
     }
