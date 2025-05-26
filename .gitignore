@@ -12,3 +12,7 @@ server/src/util/firebase_AdminSDK.json
 .env
 client/.env
 server/.env
+
+
+
+client/dist/
